@@ -1,14 +1,24 @@
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
-from .const import DOMAIN, PLATFORMS
+from homeassistant.helpers.entity_platform import async_get_platforms
+from homeassistant.helpers.entity_component import async_add_entities
+
+from .const import DOMAIN
+from .entity import SinceEntity
+
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
     hass.data.setdefault(DOMAIN, {})
     hass.data[DOMAIN][entry.entry_id] = entry.data
-    await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
+
+    name = entry.data["name"]
+    since_str = entry.data["since"]
+
+    async_add_entities = hass.helpers.entity_component.async_add_entities
+    async_add_entities([SinceEntity(name, since_str)])
+
     return True
 
 async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry):
-    await hass.config_entries.async_forward_entry_unload(entry, PLATFORMS)
-    hass.data[DOMAIN].pop(entry.entry_id)
+    hass.data[DOMAIN].pop(entry.entry_id, None)
     return True

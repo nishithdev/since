@@ -1,2 +1,1 @@
 DOMAIN = "since"
-PLATFORMS = ["sensor"]
