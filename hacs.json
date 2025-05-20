@@ -1,0 +1,9 @@
+{
+  "name": "Since",
+  "domain": "since",
+  "documentation": "https://github.com/nishithdev/since",
+  "requirements": [],
+  "codeowners": ["@nishithdev"],
+  "iot_class": "local_polling",
+  "version": "1.0.0"
+}

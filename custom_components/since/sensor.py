@@ -1,12 +1,9 @@
 from datetime import datetime, timedelta
-
 from homeassistant.components.sensor import SensorEntity
 from homeassistant.helpers.event import async_track_time_interval
-
 from .const import DOMAIN
 
 UPDATE_INTERVAL = timedelta(hours=1)
-
 
 def format_time_delta(delta: timedelta) -> str:
     days = delta.days
@@ -15,11 +12,10 @@ def format_time_delta(delta: timedelta) -> str:
     parts = []
     if days > 0:
         parts.append(f"{days} days")
-    if hours > 0 or days == 0:  # Always show hours if no days
+    if hours > 0 or days == 0:
         parts.append(f"{hours} hrs")
 
     return " ".join(parts)
-
 
 async def async_setup_entry(hass, entry, async_add_entities):
     name = entry.data["name"]
@@ -27,7 +23,6 @@ async def async_setup_entry(hass, entry, async_add_entities):
 
     sensor = SinceSensor(name, since_str)
     async_add_entities([sensor], True)
-
 
 class SinceSensor(SensorEntity):
     def __init__(self, name: str, since_str: str):
