@@ -5,8 +5,11 @@ import voluptuous as vol
 from homeassistant import config_entries
 from homeassistant.helpers.selector import (
     TextSelector,
+    TextSelectorConfig,
     DateSelector,
+    DateSelectorConfig,
     TimeSelector,
+    TimeSelectorConfig,
 )
 
 from .const import DOMAIN
@@ -22,6 +25,10 @@ class SinceConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             name = user_input["name"]
             date = user_input["date"]
             time = user_input["time"]
+
+            # Ensure time includes seconds
+            if len(time.split(":")) == 2:
+                time += ":00"
 
             # Combine date and time to a datetime string
             combined = f"{date} {time}"
@@ -41,9 +48,9 @@ class SinceConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             step_id="user",
             data_schema=vol.Schema(
                 {
-                    vol.Required("name"): TextSelector(),
-                    vol.Required("date"): DateSelector(),
-                    vol.Required("time"): TimeSelector(),
+                    vol.Required("name"): TextSelector(TextSelectorConfig()),
+                    vol.Required("date"): DateSelector(DateSelectorConfig()),
+                    vol.Required("time"): TimeSelector(TimeSelectorConfig()),
                 }
             ),
             errors=errors,
